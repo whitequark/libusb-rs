@@ -167,8 +167,8 @@ impl<'d> AsyncGroup<'d> {
         unsafe {
             (*t.transfer).user_data = &mut *self.callback_data as *mut _ as *mut c_void;
             (*t.transfer).callback = async_group_callback;
-            try_unsafe!(::libusb::libusb_submit_transfer(t.transfer));
             self.pending.insert(t.transfer);
+            try_unsafe!(::libusb::libusb_submit_transfer(t.transfer));
             mem::forget(t);
             Ok(())
         }
